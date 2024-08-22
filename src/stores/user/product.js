@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia';
-import { collection, query, getDocs } from "firebase/firestore";
+
+// import library Firestore
+import { collection, getDocs } from 'firebase/firestore/lite';
+
+// import db ตัวแทนของ Firestore
 import { db } from '@/firebase';
+
 export const useProductStore = defineStore('user-product', {
   state: () => ({
     list: [],
@@ -8,14 +13,15 @@ export const useProductStore = defineStore('user-product', {
   }),
   actions: {
     async loadProduct() {
-      let productsCol = query(collection(db, 'products'));
-      const productSnapshot = await getDocs(productsCol);
-      const products = productSnapshot.docs.map(doc => doc.data());
-
-      if (products.length > 0) {
-        this.list = products;
-        this.loaded = true;
+      // เปลี่ยนมาดึงจาก collection
+      const productsCol = collection(db, 'products');
+      const productSnapshop = await getDocs(productsCol);
+      const productList = productSnapshop.docs.map(doc => doc.data());
+      if (productList && productList.length > 0) {
+        // นำแทนกลับไปใส่ list แทน
+        this.list = productList;
       }
+      this.loaded = true;
     },
     filterProducts(searchName) {
       if (!this.loaded) {

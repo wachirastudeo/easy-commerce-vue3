@@ -17,8 +17,9 @@ const addToCart = (product) => {
 
 };
 onMounted(() => {
+  
   productStore.loadProduct()
-  console.log(  productStore.list);
+  console.log(productStore.list);
 })
 </script>
 
