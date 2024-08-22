@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
-import { auth } from '@/firebase';
+import { db, auth } from '@/firebase';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 import {
     GoogleAuthProvider,
@@ -24,10 +25,11 @@ export const useAccountStore = defineStore('account', {
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
                         this.user = user;
-                        this.isLoggedIn = true;
-                        if (this.user.email === 'admin@test.com') {
+                        if (this.user.email === 'admin@gmail.com') {
                             this.isAdmin = true;
                         }
+                        this.isLoggedIn = true;
+
                         resolve(true);
                     } else {
                         resolve(false);

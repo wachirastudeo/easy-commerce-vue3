@@ -1,10 +1,16 @@
 <script setup>
-import { useUserStore } from '@/stores/admin/user'
 import { RouterLink } from 'vue-router'
-
+import { useUserStore } from '@/stores/admin/user'
 import AdminLayout from '@/layouts/AdminLayout.vue'
+import { onMounted } from 'vue'
 
 const userStore = useUserStore()
+
+onMounted(async() => {
+  await userStore.looadUser()
+
+  
+})
 
 const toggleStatus = (index) => {
   const updateUser = userStore.list[index]
