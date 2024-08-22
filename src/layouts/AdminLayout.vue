@@ -1,15 +1,15 @@
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter,useRoute } from 'vue-router'
 import { ref } from 'vue'
-import { useRoute } from 'vue-router'
 import { useAccountStore} from '@/stores/account'
 const accountStore = useAccountStore();
 const route = useRoute()
+const router = useRouter()
 const logout= async()=>{
 
   try {
     await accountStore.logout();
-    route.push({name:'login'})
+    router.push({name:'login'})
     
   } catch (error) {
     
@@ -58,7 +58,7 @@ currentPath.value = route.path
           </RouterLink>
         </li>
         <li>
-          <RouterLink @="logout">Logout</RouterLink>
+          <a @click="logout">Logout</a>
         </li>
         
       </ul>

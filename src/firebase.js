@@ -24,7 +24,7 @@ connectFirestoreEmulator(db, '127.0.0.1', 8080);
 // ทำการเพิ่ม Firebase Auth เข้ามา
 
 const auth = getAuth();
-// connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+connectAuthEmulator(auth, 'http://127.0.0.1:9099');
 export {
     db,
     auth
