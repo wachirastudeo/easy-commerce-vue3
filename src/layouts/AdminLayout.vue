@@ -19,18 +19,26 @@ const pageData = [
   {
     name: 'Dashboard',
     route: '/admin/dashboard',
+    roles: ['admin', 'moderator']
+
   },
   {
     name: 'Product',
     route: '/admin/products',
+    roles: ['admin', 'moderator']
+
   },
   {
     name: 'Order',
     route: '/admin/orders',
+    roles: ['admin', 'moderator']
+
   },
   {
     name: 'User',
     route: '/admin/users',
+    roles: ['admin']
+
   }
  
 ]
@@ -53,7 +61,10 @@ currentPath.value = route.path
           <div>Admin </div>
         </li>
         <li v-for="page in pageData">
-          <RouterLink :to="page.route" :class="currentPath === page.route ? 'active' : ''">
+          <RouterLink 
+          
+          v-if="page.roles.includes(accountStore.profile.role)"
+          :to="page.route" :class="currentPath === page.route ? 'active' : ''">
             {{ page.name }}
           </RouterLink>
         </li>

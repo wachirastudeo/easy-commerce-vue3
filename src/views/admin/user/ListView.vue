@@ -10,10 +10,10 @@ onMounted(async () => {
   await userStore.loadUser()
 })
 
-const toggleStatus = (index) => {
-  const updateUser = userStore.list[index]
-  updateUser.status = updateUser.status === 'inactive' ? 'active' : 'inactive'
-  userStore.updateUser(index, updateUser)
+const toggleStatus = async (index) => {
+  const selecttedUser = userStore.list[index]
+  selecttedUser.status = selecttedUser.status === 'inactive' ? 'active' : 'inactive'
+  await userStore.updateUser(selecttedUser.uid, updateUser)
 }
 </script>
 
