@@ -15,7 +15,7 @@ const firebaseConfig = {
 };
 
 
-// Initialize Firebase
+// Initialize Firebase ss
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 // ใช้ emu
