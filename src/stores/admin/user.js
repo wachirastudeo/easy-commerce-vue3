@@ -26,7 +26,6 @@ export const useUserStore = defineStore('user', {
 
 
 
-            console.log(userList);
             this.list = userList;
         },
         async getUser(uid) {
@@ -52,8 +51,6 @@ export const useUserStore = defineStore('user', {
                 console.log('error', error);
             }
         },
-        removeUser(index) {
-            this.list.splice(index, 1);
-        }
+
     }
 });

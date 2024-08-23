@@ -12,18 +12,19 @@ const route = useRoute()
 
 const userId = ref(-1)
 let userData = ref({})
+
 onMounted(async () => {
   if (route.params.id) {
     userId.value = route.params.id
     userData.value = await userStore.getUser(userId.value)
 
-    console.log('userData',     userData.name)
   }
 })
 
 const updateUser = () => {
-  userStore.updateUser(userId.value, userData)
-  eventStore.popupMessage('success', 'Update Product successful!')
+  
+  userStore.updateUser(userId.value, userData.value)
+  eventStore.popupMessage('success', 'Update User successful!')
 }
 
 </script>
