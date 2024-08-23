@@ -72,7 +72,7 @@ onMounted(async () => {
                   </td>
                   <td>{{ product.updatedAt }}</td>
                   <td>
-                    <RouterLink :to="{ name: 'admin-products-update', params: { id: index } }">
+                    <RouterLink :to="{ name: 'admin-products-update', params: { id: product.productId } }">
                       <button class="btn btn-square btn-ghost">
                         <EditIcon></EditIcon>
                       </button>

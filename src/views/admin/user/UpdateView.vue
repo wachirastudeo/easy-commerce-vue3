@@ -11,22 +11,35 @@ const eventStore = useEventStore()
 const route = useRoute()
 
 const userId = ref(-1)
-let userData = ref({})
+const userData = reactive({
+  name: '',
+  role: '',
+  status: ''
+})
 
 onMounted(async () => {
   if (route.params.id) {
     userId.value = route.params.id
-    userData.value = await userStore.getUser(userId.value)
-
+    const user = await userStore.getUser(userId.value)
+    if (user) {
+      // Manually update each property of userData
+      userData.name = user.name
+      userData.role = user.role
+      userData.status = user.status
+    } else {
+      eventStore.popupMessage('error', 'Failed to load user data')
+    }
   }
 })
 
-const updateUser = () => {
-  
-  userStore.updateUser(userId.value, userData.value)
-  eventStore.popupMessage('success', 'Update User successful!')
+const updateUser = async () => {
+  try {
+    await userStore.updateUser(userId.value, userData)
+    eventStore.popupMessage('success', 'Update User successful!')
+  } catch (error) {
+    eventStore.popupMessage('error', 'Failed to update user')
+  }
 }
-
 </script>
 
 <template>
@@ -53,7 +66,7 @@ const updateUser = () => {
             <span class="label-text text-base-content">Role</span>
           </label>
           <select class="select select-bordered w-full" v-model="userData.role">
-            <option disabled selected>Select Role</option>
+            <option disabled value="">Select Role</option>
             <option value="admin">Admin</option>
             <option value="moderator">Moderator</option>
             <option value="member">Member</option>
@@ -65,7 +78,7 @@ const updateUser = () => {
             <span class="label-text text-base-content">Status</span>
           </label>
           <select class="select select-bordered w-full" v-model="userData.status">
-            <option disabled selected>Status</option>
+            <option disabled value="">Status</option>
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
           </select>
@@ -75,7 +88,7 @@ const updateUser = () => {
           <RouterLink to="/admin/users" class="btn btn-ghost">
             Back
           </RouterLink>
-          <button @click="updateUser()" class="btn btn-primary ml-4">
+          <button @click="updateUser" class="btn btn-primary ml-4">
             Update
           </button>
         </div>

@@ -30,11 +30,10 @@ export const useProductStore = defineStore("product", {
             this.list = products;
         },
         async getProduct(productId) {
-            // return this.list[index];
             try {
                 const productRef = doc(db, "products", productId);
                 const productSnapshot = await getDoc(productRef);
-                return productSnapshot.data;
+                return productSnapshot.data();
             } catch (error) { }
         },
         async addProduct(productData) {
@@ -49,8 +48,10 @@ export const useProductStore = defineStore("product", {
         },
         async updateProduct(productId, productData) {
             const updateProduct = {};
-            updateProduct.name = productData.name;
+            updateProduct.about = productData.about;
             updateProduct.imageUrl = productData.imageUrl;
+            updateProduct.name = productData.name;
+            updateProduct.price = productData.name;
             updateProduct.quantity = productData.quantity;
             updateProduct.remainQuantity = productData.quantity;
             updateProduct.status = productData.status;
