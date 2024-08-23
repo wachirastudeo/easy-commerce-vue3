@@ -61,10 +61,12 @@ export const useProductStore = defineStore("product", {
 
 
         },
-        async removeProduct(productId) {
-            const productRef = doc(db, "products", productId);
-            await deleteDoc(productRef, productId);
-            // save to localstorage
-        },
+        async removeProduct(productUid) {
+            try {
+                await deleteDoc(doc(db, 'products', productUid));
+            } catch (error) {
+                console.log('error', error);
+            }
+        }
     },
 });
