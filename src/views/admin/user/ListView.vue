@@ -6,10 +6,8 @@ import { onMounted } from 'vue'
 
 const userStore = useUserStore()
 
-onMounted(async() => {
-  await userStore.looadUser()
-
-  
+onMounted(async () => {
+  await userStore.loadUser()
 })
 
 const toggleStatus = (index) => {
@@ -52,7 +50,7 @@ const toggleStatus = (index) => {
                   </td>
                   <td>{{ user.updatedAt }}</td>
                   <td>
-                    <RouterLink :to="{ name: 'admin-user-update', params: { id: index } }">
+                    <RouterLink :to="{ name: 'admin-user-update', params: { id: user.uid } }">
                       <button class="btn">
                         Edit
                       </button>

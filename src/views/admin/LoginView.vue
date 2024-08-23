@@ -30,6 +30,8 @@ const login = async () => {
     addToast(`Login failed: ${error.message}`, 'error');
   }
 };
+
+
 </script>
 
 <template>
