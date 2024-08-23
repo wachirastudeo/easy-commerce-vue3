@@ -31,14 +31,26 @@ export const useAccountStore = defineStore('account', {
                     try {
                         if (user) {
                             this.user = user;
+                            console.log("xx");
+
                             this.isLoggedIn = true;
+
+
                             // เพิ่มการอ้างอิงถึง collection users, document id 
+
+
+                            if (user.email === 'admin@gmail.com') {
+                                this.isAdmin = true;
+                            }
+
                             const docRef = doc(db, 'users', user.uid);
-                            console.log(docRef);
                             const docSnap = await getDoc(docRef);
 
-                            // ถ้าข้อมูลไม่มีอยู่ = เขียนข้อมูลเข้าไปใหม่
-                            if (!docSnap.exists()) {
+
+                            if (docSnap.exists()) {
+
+                            }
+                            else {
                                 const userData = {
                                     name: user.displayName,
                                     role: 'member',
@@ -46,13 +58,8 @@ export const useAccountStore = defineStore('account', {
                                     updatedAt: new Date()
                                 };
                                 await setDoc(docRef, userData);
-                                this.profile = userData;
-                            } else {
-                                this.profile = docSnap.data();
                             }
-                            if (this.profile.role !== 'member') {
-                                this.isAdmin = true;
-                            }
+
                             resolve(true);
                         } else {
                             resolve(false);
