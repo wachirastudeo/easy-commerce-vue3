@@ -11,13 +11,13 @@ const eventStore = useEventStore()
 const route = useRoute()
 
 const userId = ref(-1)
-let userData = reactive({})
-
-onMounted(() => {
+let userData = ref({})
+onMounted(async () => {
   if (route.params.id) {
     userId.value = route.params.id
-    userData = userStore.getUser(userId.value)
-    console.log('userData', userData)
+    userData.value = await userStore.getUser(userId.value)
+
+    console.log('userData',     userData.name)
   }
 })
 

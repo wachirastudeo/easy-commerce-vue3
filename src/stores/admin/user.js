@@ -38,11 +38,19 @@ export const useUserStore = defineStore('user', {
                 console.log('error', error);
             }
         },
-        async updateUser(index, userData) {
-            this.list[index].name = userData.name;
-            this.list[index].status = userData.status;
-            this.list[index].role = userData.role;
-            this.list[index].updatedAt = (new Date()).toLocaleString();
+        async updateUser(userUid, userData) {
+            try {
+                let updatedUser = {
+                    name: userData.name,
+                    status: userData.status,
+                    role: userData.role,
+                    updatedAt: new Date()
+                };
+                const docRef = doc(db, 'users', userUid);
+                await setDoc(docRef, updatedUser);
+            } catch (error) {
+                console.log('error', error);
+            }
         },
         removeUser(index) {
             this.list.splice(index, 1);
