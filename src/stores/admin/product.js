@@ -1,39 +1,69 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
+import {
+    collection,
+    getDocs,
+    doc,
+    addDoc,
+    getDoc,
+    setDoc,
+    deleteDoc,
+    query,
+} from "firebase/firestore";
+import { db } from "@/firebase";
 
-export const useProductStore = defineStore('product', {
+export const useProductStore = defineStore("product", {
     state: () => ({
-        list: []
+        list: [],
+        loaded: false,
     }),
     actions: {
-        loadProduct() {
-            const productList = localStorage.getItem('product-data');
-            if (productList) {
-                this.list = JSON.parse(productList);
+        async loadProduct() {
+            const productCol = collection(db, "products");
+            const productSnapShot = await getDocs(productCol);
+            const products = productSnapShot.docs.map((doc) => {
+                const convertedProduct = doc.data();
+                convertedProduct.productId = doc.id;
+                convertedProduct.updatedAt = convertedProduct.updatedAt.toDate();
+                return convertedProduct;
+            });
+
+            this.list = products;
+        },
+        async getProduct(productId) {
+            // return this.list[index];
+            try {
+                const productRef = doc(db, "products", productId);
+                const productSnapshot = await getDoc(productRef);
+                return productSnapshot.data;
+            } catch (error) { }
+        },
+        async addProduct(productData) {
+            productData.remainQuantity = productData.quantity;
+            productData.updatedAt = new Date();
+            try {
+                const productCol = collection(db, "products");
+                await addDoc(productCol, productData);
+            } catch (error) {
+                console.log("error", error);
             }
         },
-        getProduct(index) {
-            return this.list[index];
+        async updateProduct(productId, productData) {
+            const updateProduct = {};
+            updateProduct.name = productData.name;
+            updateProduct.imageUrl = productData.imageUrl;
+            updateProduct.quantity = productData.quantity;
+            updateProduct.remainQuantity = productData.quantity;
+            updateProduct.status = productData.status;
+            updateProduct.updatedAt = new Date();
+            const productRef = doc(db, "products", productId);
+            await setDoc(productRef, updateProduct);
+
+
         },
-        addProduct(productData) {
-            productData.remainQuantity = productData.quantity;
-            this.list.push(productData);
+        async removeProduct(productId) {
+            const productRef = doc(db, "products", productId);
+            await deleteDoc(productRef, productId);
             // save to localstorage
-            localStorage.setItem('product-data', JSON.stringify(this.list));
         },
-        updateProduct(index, productData) {
-            this.list[index].name = productData.name;
-            this.list[index].imageUrl = productData.imageUrl;
-            this.list[index].quantity = productData.quantity;
-            this.list[index].remainQuantity = productData.quantity;
-            this.list[index].status = productData.status;
-            this.list[index].updatedAt = (new Date).toLocaleString();
-            // save to localstorage
-            localStorage.setItem('product-data', JSON.stringify(this.list));
-        },
-        removeProduct(index) {
-            this.list.splice(index, 1);
-            // save to localstorage
-            localStorage.setItem('product-data', JSON.stringify(this.list));
-        }
-    }
+    },
 });

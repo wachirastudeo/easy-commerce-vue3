@@ -7,6 +7,7 @@ import { RouterLink } from 'vue-router'
 import AdminLayout from '@/layouts/AdminLayout.vue'
 import TrashIcon from '@/components/icons/Trash.vue'
 import EditIcon from '@/components/icons/Edit.vue'
+import { onMounted } from 'vue'
 
 const productStore = useProductStore()
 const eventStore = useEventStore()
@@ -15,6 +16,10 @@ const removeProduct = (index) => {
   productStore.removeProduct(index)
   eventStore.popupMessage('success', 'DELETE Successful!')
 }
+onMounted(async () => {
+  // เพิ่ม await สำหรับ loadProduct จาก Firestore ก่อน
+  await productStore.loadProduct()
+})
 </script>
 <template>
   <AdminLayout>
