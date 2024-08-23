@@ -1,16 +1,27 @@
 import { defineStore } from 'pinia';
 import { db } from '@/firebase';
-import { doc, collection, getDoc, getDocs, setDoc } from 'firebase/firestore';
+import {
+    collection,
+    getDocs,
+    doc,
+    getDoc,
+    setDoc
+} from 'firebase/firestore';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
         list: []
     }),
     actions: {
+        // load user form database collection users
         async looadUser() {
             const userCol = collection(db, 'users');
             const userSnapShot = await getDocs(userCol);
-            console.log(userSnapShot);
+            const userList = userSnapShot.docs.map(doc => {
+                return doc.data();
+            });
+
+            console.log(userList);
         },
         getUser(index) {
             return this.list[index];

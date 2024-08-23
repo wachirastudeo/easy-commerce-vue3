@@ -24,7 +24,6 @@ const login = async () => {
   try {
     await accountStore.singInWithAdmin(email.value, password.value);
     router.push({ name: 'admin-dashboard' });
-    addToast('Successfully logged in!', 'success');
   } catch (error) {
     console.log('error page =', error.message);
     eventStore.popupMessage('error', error.message);

@@ -33,21 +33,18 @@ export const useAccountStore = defineStore('account', {
                             this.user = user;
                             console.log("xx");
 
-                            this.isLoggedIn = true;
 
 
                             // เพิ่มการอ้างอิงถึง collection users, document id 
 
 
-                            if (user.email === 'admin@gmail.com') {
-                                this.isAdmin = true;
-                            }
 
                             const docRef = doc(db, 'users', user.uid);
                             const docSnap = await getDoc(docRef);
 
 
                             if (docSnap.exists()) {
+                                this.profile = docSnap.data();
 
                             }
                             else {
@@ -58,7 +55,12 @@ export const useAccountStore = defineStore('account', {
                                     updatedAt: new Date()
                                 };
                                 await setDoc(docRef, userData);
+                                this.profile = userData;
                             }
+                            if (this.profile.role === 'admin') {
+                                this.isAdmin = true;
+                            }
+                            this.isLoggedIn = true;
 
                             resolve(true);
                         } else {
